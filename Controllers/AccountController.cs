@@ -11,10 +11,16 @@ namespace SimpleSolidPrototype.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
+
+
+
         // GET: api/Account
         [HttpGet]
         public IEnumerable<string> Get()
         {
+            // List of all accounts
+
+            // The header will have the authorization token, and the webid
             return new string[] { "value1", "value2" };
         }
 
