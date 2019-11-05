@@ -11,8 +11,9 @@ namespace SimpleSolidPrototype.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
+        public string AuthorizationToken => Request.Headers["Authorization"];
 
-
+        public string WebId => Request.Headers["WebId"];
 
         // GET: api/Account
         [HttpGet]
