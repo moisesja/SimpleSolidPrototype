@@ -12,7 +12,7 @@ namespace SimpleSolidPrototype.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        public string AuthorizationToken => Request.Headers["Authorization"];
+        public string AccessToken => Request.Headers["Authorization"];
 
         public string WebId => Request.Headers["WebId"];
 
@@ -20,7 +20,7 @@ namespace SimpleSolidPrototype.Controllers
         [HttpGet]
         public async Task<IEnumerable<string>> Get()
         {
-            var solidAgent = new SolidAgent(AuthorizationToken, WebId);
+            var solidAgent = new SolidAgent(AccessToken, WebId);
             var content = await solidAgent.GetPrivateFolderTurtle();
 
             return new List<string>() { "hello", "world", content };
