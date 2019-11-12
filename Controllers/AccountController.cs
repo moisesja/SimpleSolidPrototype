@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SimpleSolidPrototype.Agents;
 
 namespace SimpleSolidPrototype.Controllers
 {
@@ -17,12 +18,12 @@ namespace SimpleSolidPrototype.Controllers
 
         // GET: api/Account
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IEnumerable<string>> Get()
         {
-            // List of all accounts
+            var solidAgent = new SolidAgent(AuthorizationToken, WebId);
+            var content = await solidAgent.GetPrivateFolderTurtle();
 
-            // The header will have the authorization token, and the webid
-            return new string[] { "value1", "value2" };
+            return new List<string>() { "hello", "world", content };
         }
 
         // GET: api/Account/5
@@ -31,7 +32,7 @@ namespace SimpleSolidPrototype.Controllers
         {
             return "value";
         }
-
+        
         // POST: api/Account
         [HttpPost]
         public void Post([FromBody] string value)
