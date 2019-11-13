@@ -11,8 +11,6 @@ $(function ($) {
 
     let authorizationToken = '';
 
-
-
     $('#logout-button').hide();
     $('#login-button').click(showSolidLogin);
 
@@ -31,6 +29,15 @@ $(function ($) {
             console.log('Token:', authorizationToken);
             console.log('Web ID:', session.webId);
 
+            // Fetch the contents from the Private Folder
+            solid.auth.fetch('https://moisesj.inrupt.net/inbox')
+                .then(response => {
+
+                    if (!response.ok)
+                        throw response;
+
+                    console.log('Response Body', response.text());
+                });
         }
         else {
             console.log('Moises say: No session data.');

@@ -20,6 +20,8 @@ namespace SimpleSolidPrototype.Agents
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/turtle"));
 
+                //client.DefaultRequestHeaders.Add("Origin", "https://localhost:44345");
+
                 var responseMessage = await client.GetAsync(resource);
                 //responseMessage.EnsureSuccessStatusCode();
 
@@ -46,7 +48,6 @@ namespace SimpleSolidPrototype.Agents
         public async Task<string> GetPrivateFolderTurtle()
         {
             var content = await GetAsync("private/");
-
             return content;
         }
     }
