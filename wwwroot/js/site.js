@@ -10,6 +10,7 @@
 $(function ($) {
 
     let authorizationToken = '';
+    let webId = '';
 
     $('#logout-button').hide();
     $('#login-button').click(showSolidLogin);
@@ -28,6 +29,7 @@ $(function ($) {
         if (loggedIn) {
 
             authorizationToken = session.authorization.id_token;
+            webId = session.webId;
             console.log('Token:', authorizationToken);
             console.log('Web ID:', session.webId);
 
@@ -49,7 +51,13 @@ $(function ($) {
     $('#logout-button').click(() => solid.auth.logout());    
 
     $('#fetch-button').click((args) => {
-        const response = fetch('api/account');
+        const response = fetch('api/account', {
+            method: 'GET',
+            headers: {
+                'Authorization': authorizationToken,
+                'WebId': webId
+            }
+        });
         const myJson = response.json(); //extract JSON from the http response
         console.log(myJson);
     }); 
