@@ -47,7 +47,7 @@ namespace SimpleSolidPrototype.Agents
 
         public async Task<string> GetPrivateFolderTurtle()
         {
-            var content = await GetAsync("private/");
+            var content = await GetAsync("private");
             return content;
         }
     }

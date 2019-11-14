@@ -23,14 +23,16 @@ $(function ($) {
         $('#login-button').toggle(!loggedIn);
         $('#logout-button').toggle(loggedIn);
 
-        if (session) {
+        $('#fetch-button').toggle(loggedIn);
+
+        if (loggedIn) {
 
             authorizationToken = session.authorization.id_token;
             console.log('Token:', authorizationToken);
             console.log('Web ID:', session.webId);
 
             // Fetch the contents from the Private Folder
-            solid.auth.fetch('https://moisesj.inrupt.net/inbox')
+            solid.auth.fetch('https://moisesj.solid.community/private')
                 .then(response => {
 
                     if (!response.ok)
@@ -45,4 +47,10 @@ $(function ($) {
     });
 
     $('#logout-button').click(() => solid.auth.logout());    
+
+    $('#fetch-button').click((args) => {
+        const response = fetch('api/account');
+        const myJson = response.json(); //extract JSON from the http response
+        console.log(myJson);
+    }); 
 });
