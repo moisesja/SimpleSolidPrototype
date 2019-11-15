@@ -14,7 +14,20 @@ namespace SimpleSolidPrototype.Controllers
     {
         public string AccessToken => Request.Headers["Authorization"];
 
-        public string WebId => Request.Headers["WebId"];
+        public string WebId
+        {
+            get
+            {
+                var webIdHeader = Request.Headers["WebId"];
+
+                if (webIdHeader.Count > 0)
+                {
+                    return webIdHeader.ToString().Replace("/profile/card#me", string.Empty);
+                }
+                
+                return string.Empty;
+            }
+        }
 
         // GET: api/Account
         [HttpGet]
