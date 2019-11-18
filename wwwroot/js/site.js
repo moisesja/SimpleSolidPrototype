@@ -1,6 +1,6 @@
 ﻿async function showSolidLogin() {
     
-    const popupUri = '/lib/solid-auth-client/dist-popup/popup.html';
+    const popupUri = '/lib/solid-auth-client/selected-provider-popup.html';
     const session = await solid.auth.popupLogin({ popupUri });
 
     if (session)
