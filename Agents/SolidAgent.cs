@@ -62,9 +62,9 @@ namespace SimpleSolidPrototype.Agents
             _webId = webId;
         }
 
-        public async Task<string> GetPrivateFolderTurtle()
+        public async Task<string> GetAccounts()
         {            
-            return await GetAsync("inbox/");
+            return await GetAsync("private/");
         }
     }
 }

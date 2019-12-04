@@ -34,7 +34,7 @@ $(function ($) {
             console.log('Web ID:', session.webId);
 
             // Fetch the contents from the Private Folder
-            solid.auth.fetch('https://moisesj.inrupt.net/inbox/')
+            solid.auth.fetch('https://moisesj.solid.community/private/')
                 .then(response => {
 
                     if (!response.ok)

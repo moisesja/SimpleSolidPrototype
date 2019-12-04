@@ -34,7 +34,7 @@ namespace SimpleSolidPrototype.Controllers
         public async Task<IEnumerable<string>> Get()
         {
             var solidAgent = new SolidAgent(AccessToken, WebId);
-            var content = await solidAgent.GetPrivateFolderTurtle();
+            var content = await solidAgent.GetAccounts();
 
             return new List<string>() { "hello", "world", content };
         }
