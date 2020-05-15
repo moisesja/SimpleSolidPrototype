@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace SimpleSolidPrototype.Agents
 {
@@ -11,6 +12,7 @@ namespace SimpleSolidPrototype.Agents
         private readonly string _webId;
         private readonly string _accessToken;
         private readonly AuthenticationHeaderValue _authenticationHeader;
+        private readonly string _origin;
 
         private void ListHeaders(HttpClient client)
         {
@@ -22,7 +24,12 @@ namespace SimpleSolidPrototype.Agents
 
         private async Task<string> GetAsync(string resource)
         {
-            using (var client = new HttpClient())
+            var httpClientHandler = new HttpClientHandler();
+
+            // TODO: Do this conditionally based on environment
+            httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true; // DEBUGGING ONLY
+            
+            using (var client = new HttpClient(httpClientHandler))
             {
                 //client.BaseAddress = new Uri(_webId);
 
@@ -35,31 +42,33 @@ namespace SimpleSolidPrototype.Agents
 
                 var url = $"{_webId}/{resource}";
 
-                var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
-                requestMessage.Headers.Authorization = _authenticationHeader;
-                requestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/turtle"));
+                var request = new HttpRequestMessage(HttpMethod.Get, url);
+                request.Headers.Authorization = _authenticationHeader;
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/turtle"));
+                request.Headers.Add("Origin", _origin);
 
-                var responseMessage = await client.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead);
+                var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
-                var responseText = await responseMessage.Content.ReadAsStringAsync();
+                var responseContent = await response.Content.ReadAsStringAsync();
                 
-                if (responseMessage.StatusCode != System.Net.HttpStatusCode.OK)
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 {
                     //var json = await getResponse.Content.ReadAsStringAsync();
-                    //dynamic obj = (dynamic)JsonConvert.DeserializeObject(json);
+                    dynamic obj = (dynamic)JsonConvert.DeserializeObject(responseContent);
 
                     //throw new FindMyRelativesBusinessException(string.Format("{0} - {1}", obj.error, obj.error_description));
                 }
 
-                return responseText;
+                return responseContent;
             }
         }
 
-        public SolidAgent(string accessToken, string webId)
+        public SolidAgent(string accessToken, string webId, string origin)
         {
             _accessToken = accessToken;
             _authenticationHeader = new AuthenticationHeaderValue("Bearer", accessToken);
             _webId = webId;
+            _origin = origin;
         }
 
         public async Task<string> GetAccounts()

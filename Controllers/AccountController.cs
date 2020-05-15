@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Headers;
 using Microsoft.AspNetCore.Mvc;
 using SimpleSolidPrototype.Agents;
 
@@ -14,29 +15,28 @@ namespace SimpleSolidPrototype.Controllers
     {
         public string AccessToken => Request.Headers["Authorization"];
 
-        public string WebId
-        {
-            get
-            {
-                var webIdHeader = Request.Headers["WebId"];
-
-                if (webIdHeader.Count > 0)
-                {
-                    return webIdHeader.ToString().Replace("/profile/card#me", string.Empty);
-                }
-                
-                return string.Empty;
-            }
-        }
+        public string WebId => Request.Headers["WebId"];
 
         // GET: api/Account
         [HttpGet]
         public async Task<IEnumerable<string>> Get()
         {
-            var solidAgent = new SolidAgent(AccessToken, WebId);
-            var content = await solidAgent.GetAccounts();
+            try
+            {
+                var solidAgent = new SolidAgent(AccessToken, WebId, "https://localhost:5001");
+                var content = await solidAgent.GetAccounts();
 
-            return new List<string>() { "hello", "world", content };
+                RequestHeaders header = Request.GetTypedHeaders();
+                Uri uriReferer = header.Referer;
+
+
+
+                return new List<string>() { "hello", "world", content };
+            }
+            catch (Exception exc)
+            {
+                throw;
+            }
         }
 
         // GET: api/Account/5
